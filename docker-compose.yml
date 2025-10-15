@@ -1,22 +1,22 @@
 services:
-  proxy20059:
+  proxy20078:
     image: nginx:alpine
-    container_name: rp_proxy_20059
+    container_name: rp_proxy_20078
     ports:
-      - "20059:20059"
+      - "20078:20078"
     volumes:
       - ./nginx/app.conf:/etc/nginx/conf.d/app.conf:ro
     depends_on:
-      web20059:
+      web20078:
         condition: service_started
-      pgadmin20059:
+      pgadmin20078:
         condition: service_started
-    networks: [webnet20059]
+    networks: [webnet20078]
     restart: unless-stopped
 
-  web20059:
+  web20078:
     image: python:3.12-slim
-    container_name: dj_webapp20059
+    container_name: dj_webapp20078
     working_dir: /app
     volumes:
       - ./:/app
@@ -30,36 +30,36 @@ services:
       DJANGO_DB_NAME: "appdb"
       DJANGO_DB_USER: "appuser"
       DJANGO_DB_PASSWORD: "apppass"
-      DJANGO_DB_HOST: "db20059"
+      DJANGO_DB_HOST: "db20078"
       DJANGO_DB_PORT: "5432"
     command: ["bash", "-lc", "/usr/local/bin/web-entry.sh"]
     expose: ["8000"]
     depends_on:
-      db20059:
+      db20078:
         condition: service_healthy
-    networks: [webnet20059]
+    networks: [webnet20078]
     restart: unless-stopped
 
-  db20059:
+  db20078:
     image: postgres:16
-    container_name: pg_db20059
+    container_name: pg_db20078
     environment:
       POSTGRES_DB: appdb
       POSTGRES_USER: appuser
       POSTGRES_PASSWORD: apppass
     volumes:
-      - pg_data20059:/var/lib/postgresql/data
+      - pg_data20078:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U appuser -d appdb"]
       interval: 5s
       timeout: 5s
       retries: 10
-    networks: [webnet20059]
+    networks: [webnet20078]
     restart: unless-stopped
 
-  pgadmin20059:
+  pgadmin20078:
     image: dpage/pgadmin4:latest
-    container_name: pgadmin_svc20059
+    container_name: pgadmin_svc20078
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@example.com
       PGADMIN_DEFAULT_PASSWORD: admin123
@@ -70,14 +70,14 @@ services:
       PGADMIN_CONFIG_SERVER_MODE: "True"
     expose: ["8080"]
     volumes:
-      - pgadmin_data20059:/var/lib/pgadmin
-    networks: [webnet20059]
+      - pgadmin_data20078:/var/lib/pgadmin
+    networks: [webnet20078]
     restart: unless-stopped
 
 volumes:
-  pg_data20059:
-  pgadmin_data20059:
+  pg_data20078:
+  pgadmin_data20078:
 
 networks:
-  webnet20059:
+  webnet20078:
     driver: bridge

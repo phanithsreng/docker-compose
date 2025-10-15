@@ -11,7 +11,7 @@ set -euo pipefail
 : "${DJANGO_DB_NAME:=appdb}"
 : "${DJANGO_DB_USER:=appuser}"
 : "${DJANGO_DB_PASSWORD:=apppass}"
-: "${DJANGO_DB_HOST:=db20059}"
+: "${DJANGO_DB_HOST:=db20078}"
 : "${DJANGO_DB_PORT:=5432}"
 
 # -------- Python deps --------
@@ -94,7 +94,7 @@ if marker_csrf not in s:
 _CS_ORIGINS = []
 for _h in ALLOWED_HOSTS:
     if _h:
-        _CS_ORIGINS += [f"http://{{_h}}:20059", f"https://{{_h}}:20059", f"http://{{_h}}", f"https://{{_h}}"]
+        _CS_ORIGINS += [f"http://{{_h}}:20078", f"https://{{_h}}:20078", f"http://{{_h}}", f"https://{{_h}}"]
 CSRF_TRUSTED_ORIGINS = list(dict.fromkeys(_CS_ORIGINS))
 """
 
@@ -109,7 +109,7 @@ DATABASES["default"]["ENGINE"]   = "django.db.backends.postgresql"
 DATABASES["default"]["NAME"]     = os.getenv("DJANGO_DB_NAME", "appdb")
 DATABASES["default"]["USER"]     = os.getenv("DJANGO_DB_USER", "appuser")
 DATABASES["default"]["PASSWORD"] = os.getenv("DJANGO_DB_PASSWORD", "apppass")
-DATABASES["default"]["HOST"]     = os.getenv("DJANGO_DB_HOST", "db20059")
+DATABASES["default"]["HOST"]     = os.getenv("DJANGO_DB_HOST", "db20078")
 DATABASES["default"]["PORT"]     = os.getenv("DJANGO_DB_PORT", "5432")
 """
 if marker_db not in s:
@@ -134,7 +134,7 @@ PY
 echo "⏳ Waiting for Postgres at ${DJANGO_DB_HOST}:${DJANGO_DB_PORT} ..."
 python - <<PY
 import os, time, psycopg2
-host = os.getenv("DJANGO_DB_HOST","db20059")
+host = os.getenv("DJANGO_DB_HOST","db20078")
 port = int(os.getenv("DJANGO_DB_PORT","5432"))
 user = os.getenv("DJANGO_DB_USER","appuser")
 pwd  = os.getenv("DJANGO_DB_PASSWORD","apppass")
