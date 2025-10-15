@@ -22,7 +22,7 @@ services:
       - ./:/app
       - ./web-entry.sh:/usr/local/bin/web-entry.sh:ro
     environment:
-      DJANGO_PROJECT: "webapp"
+      DJANGO_PROJECT: "py_docker_compose"
       DJANGO_SECRET_KEY: "change-me"
       DJANGO_DEBUG: "1"
       DJANGO_ALLOWED_HOSTS: "reaseykunnvath.karkark.net,localhost,127.0.0.1"
