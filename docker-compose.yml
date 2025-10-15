@@ -1,0 +1,83 @@
+services:
+  proxy20059:
+    image: nginx:alpine
+    container_name: rp_proxy_20059
+    ports:
+      - "20059:20059"
+    volumes:
+      - ./nginx/app.conf:/etc/nginx/conf.d/app.conf:ro
+    depends_on:
+      web20059:
+        condition: service_started
+      pgadmin20059:
+        condition: service_started
+    networks: [webnet20059]
+    restart: unless-stopped
+
+  web20059:
+    image: python:3.12-slim
+    container_name: dj_webapp20059
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - ./web-entry.sh:/usr/local/bin/web-entry.sh:ro
+    environment:
+      DJANGO_PROJECT: "webapp"
+      DJANGO_SECRET_KEY: "change-me"
+      DJANGO_DEBUG: "1"
+      DJANGO_ALLOWED_HOSTS: "reaseykunnvath.karkark.net,localhost,127.0.0.1"
+      DJANGO_PORT: "8000"
+      DJANGO_DB_NAME: "appdb"
+      DJANGO_DB_USER: "appuser"
+      DJANGO_DB_PASSWORD: "apppass"
+      DJANGO_DB_HOST: "db20059"
+      DJANGO_DB_PORT: "5432"
+    command: ["bash", "-lc", "/usr/local/bin/web-entry.sh"]
+    expose: ["8000"]
+    depends_on:
+      db20059:
+        condition: service_healthy
+    networks: [webnet20059]
+    restart: unless-stopped
+
+  db20059:
+    image: postgres:16
+    container_name: pg_db20059
+    environment:
+      POSTGRES_DB: appdb
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: apppass
+    volumes:
+      - pg_data20059:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U appuser -d appdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks: [webnet20059]
+    restart: unless-stopped
+
+  pgadmin20059:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_svc20059
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_LISTEN_PORT: "8080"
+      PGADMIN_CONFIG_PATH_PREFIX: "'/phppgadmin'" # keep inner quotes
+      PGADMIN_CONFIG_PROXY_X_FOR_COUNT: 1
+      PGADMIN_CONFIG_PROXY_X_PROTO_COUNT: 1
+      PGADMIN_CONFIG_SERVER_MODE: "True"
+    expose: ["8080"]
+    volumes:
+      - pgadmin_data20059:/var/lib/pgadmin
+    networks: [webnet20059]
+    restart: unless-stopped
+
+volumes:
+  pg_data20059:
+  pgadmin_data20059:
+
+networks:
+  webnet20059:
+    driver: bridge
