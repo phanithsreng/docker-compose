@@ -5,7 +5,7 @@ set -euo pipefail
 : "${DJANGO_PROJECT:=py_docker_compose}"
 : "${DJANGO_SECRET_KEY:=change-me}"
 : "${DJANGO_DEBUG:=1}"
-: "${DJANGO_ALLOWED_HOSTS:=reaseykunnvath.karkark.net,localhost,127.0.0.1}"
+: "${DJANGO_ALLOWED_HOSTS:=srengphanith.karkark.net,localhost,127.0.0.1}"
 : "${DJANGO_PORT:=8000}"
 
 : "${DJANGO_DB_NAME:=appdb}"
@@ -70,7 +70,7 @@ if not re.search(r'^\s*ALLOWED_HOSTS\s*=', s, re.M):
     s += '\nALLOWED_HOSTS = []\n'
 s = re.sub(
     r'^\s*ALLOWED_HOSTS\s*=.*$',
-    "ALLOWED_HOSTS = [h.strip() for h in os.getenv('DJANGO_ALLOWED_HOSTS','reaseykunnvath.karkark.net,localhost,127.0.0.1').split(',') if h.strip()]",
+    "ALLOWED_HOSTS = [h.strip() for h in os.getenv('DJANGO_ALLOWED_HOSTS','srengphanith.karkark.net,localhost,127.0.0.1').split(',') if h.strip()]",
     s, flags=re.M
 )
 

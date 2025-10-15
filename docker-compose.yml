@@ -25,7 +25,7 @@ services:
       DJANGO_PROJECT: "py_docker_compose"
       DJANGO_SECRET_KEY: "change-me"
       DJANGO_DEBUG: "1"
-      DJANGO_ALLOWED_HOSTS: "reaseykunnvath.karkark.net,localhost,127.0.0.1"
+      DJANGO_ALLOWED_HOSTS: "srengphanith.karkark.net,localhost,127.0.0.1"
       DJANGO_PORT: "8000"
       DJANGO_DB_NAME: "appdb"
       DJANGO_DB_USER: "appuser"
